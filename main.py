@@ -273,14 +273,6 @@ with tab3:
             }
 
         }
-
-        team_index = next((i for i, team in enumerate(data["Teams"]) if team["Number"] == team_number), None)
-        if team_index is not None:
-            removed_team = data["Teams"].pop(team_index)
-        data["Teams"].append(new_team)
-        
-        with open("data.json", "w") as f:
-            json.dump(data, f, indent=2)
         
         st.success(f"Team {team_number} - {team_name} modified!")
         t.sleep(2)
@@ -290,9 +282,19 @@ with tab3:
         if confi == "meowmeowmeow":
             team_index = next((i for i, team in enumerate(data["Teams"]) if team["Number"] == selectedteam_edit), None)
             if team_index is not None:
+                team_index = next((i for i, team in enumerate(data["Teams"]) if team["Number"] == team_number), None)
+                removed_team = data["Teams"].pop(team_index)
+                data["Teams"].append(new_team)
+                t.sleep(1)
                 removed_team = data["Teams"].pop(team_index)
                 with open("data.json", "w") as f:
                     json.dump(data, f, indent=2)
+
+
+                
+                with open("data.json", "w") as f:
+                    json.dump(data, f, indent=2)
+
                 st.success(f"Team {removed_team['Number']} - {removed_team['Name']} deleted!")
                 t.sleep(1)
                 st.rerun()
@@ -304,4 +306,4 @@ with tab3:
     
     # Pre-fill input fields with existing data
 
-
+st.text("meow - CY")
