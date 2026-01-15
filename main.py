@@ -249,52 +249,62 @@ with tab3:
     
     if st.button("Modify", type="primary"):
         # Create new team entry
-        new_team = {
-            "Number": team_info_edit["Number"],
-            "School": school,
-            "Name": team_name,
-            "Picture": team_info_edit["Picture"],
-            "Notes" : {"MatchFlaws" : MatchFlaws,"DriverNotes" : DriverNotes,"AutonNotes" : AutonNotes,"AdditionalNotes" : AdditionalNotes},
-            "InfoSheet" : {
-                "BotType": bot_type,
-                "DriveType": drive_type,
-                "Parking": parking,
-                "MotorCount": DT_motor_count,
-                "LeftAuton": left_auton,
-                "RightAuton": right_auton,
-                "Driver": driver_rating,
-                "ScoreMech": score_mech,
-                "Consistency": consistency,
-                "Wing": wing,
-                "Matchload": matchload,
-                "Descore": descore,
-                "GoUnder": go_under,
-                "Aligner": aligner
-            }
+        try:
+        # It's safer to use the original number from the unedited record
+            original_team_number = team_info_edit["Number"]
+            
+            # Find the index. This handles if numbers are stored as strings or ints.
+            team_index = next(
+                i for i, team in enumerate(data["Teams"]) 
+                if str(team["Number"]) == str(original_team_number)
+            )
 
-        }
-        
-        st.success(f"Team {team_number} - {team_name} modified!")
-        t.sleep(2)
-        st.rerun()  # Refresh the app to show the new team in dropdowns
+            updated_team = {
+                "Number": team_info_edit["Number"],
+                "School": school,
+                "Name": team_name,
+                "Picture": team_info_edit["Picture"],
+                "Notes" : {"MatchFlaws" : MatchFlaws,"DriverNotes" : DriverNotes,"AutonNotes" : AutonNotes,"AdditionalNotes" : AdditionalNotes},
+                "InfoSheet" : {
+                    "BotType": bot_type,
+                    "DriveType": drive_type,
+                    "Parking": parking,
+                    "MotorCount": DT_motor_count,
+                    "LeftAuton": left_auton,
+                    "RightAuton": right_auton,
+                    "Driver": driver_rating,
+                    "ScoreMech": score_mech,
+                    "Consistency": consistency,
+                    "Wing": wing,
+                    "Matchload": matchload,
+                    "Descore": descore,
+                    "GoUnder": go_under,
+                    "Aligner": aligner
+                }
+
+            }
+            data["Teams"][team_index] = updated_team
+                    
+            # Save the entire updated list back to the file
+            with open("data.json", "w") as f:
+                json.dump(data, f, indent=2)
+            
+            st.success(f"Team {team_number} - {team_name} modified successfully!")
+            t.sleep(2)
+            st.rerun()
+
+        except StopIteration:
+        # This will happen if the team is not found, which shouldn't occur in an edit operation.
+            st.error(f"Error: Could not find team {team_info_edit['Number']} to modify.")
+
     confi = st.text_input("Type meowmeowmeow to confirm deletion", key="delete_confirm")
     if st.button("Delete Entry"):
         if confi == "meowmeowmeow":
             team_index = next((i for i, team in enumerate(data["Teams"]) if team["Number"] == selectedteam_edit), None)
             if team_index is not None:
-                team_index = next((i for i, team in enumerate(data["Teams"]) if team["Number"] == team_number), None)
-                removed_team = data["Teams"].pop(team_index)
-                data["Teams"].append(new_team)
-                t.sleep(1)
                 removed_team = data["Teams"].pop(team_index)
                 with open("data.json", "w") as f:
                     json.dump(data, f, indent=2)
-
-
-                
-                with open("data.json", "w") as f:
-                    json.dump(data, f, indent=2)
-
                 st.success(f"Team {removed_team['Number']} - {removed_team['Name']} deleted!")
                 t.sleep(1)
                 st.rerun()
@@ -303,7 +313,3 @@ with tab3:
                 st.rerun()
         else:
             st.error("please type in confirmation")
-    
-    # Pre-fill input fields with existing data
-
-st.text("meow - CY")
