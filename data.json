@@ -1,0 +1,32 @@
+{
+  "Teams": [
+    {
+      "Number": "86832B",
+      "School": "ISBeijing",
+      "Name": "Elevator Elevator",
+      "Picture": "uploads/2968bc4f7c49ce4f45f8f3218df42f97.jpg",
+      "Notes": {
+        "MatchFlaws": "dfdsf",
+        "DriverNotes": "sdfsdf",
+        "AutonNotes": "sdfsdf",
+        "AdditionalNotes": "df"
+      },
+      "InfoSheet": {
+        "BotType": "Lever Bot",
+        "DriveType": "* Drive",
+        "Parking": "None",
+        "MotorCount": 4,
+        "LeftAuton": "None",
+        "RightAuton": "None",
+        "Driver": 4,
+        "ScoreMech": 4,
+        "Consistency": 4,
+        "Wing": true,
+        "Matchload": true,
+        "Descore": false,
+        "GoUnder": true,
+        "Aligner": true
+      }
+    }
+  ]
+}
